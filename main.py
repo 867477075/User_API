@@ -2,7 +2,7 @@ import requests
 import json
 from pprint import pprint
 from flask import Flask, render_template, request, Response
-from dal.dml import insert_data ,delete_record
+from dal.dml import insert_data ,delete_record ,upsert
 from models.datamodels.user_model import User_data
 from pymysql.err import IntegrityError
 app = Flask(__name__)
@@ -66,5 +66,19 @@ def delete(id_):
     return Response(json.dumps(response_obj))
 
 
+@app.route("/user",methods=["PUT"])
+def upsert_():
+    request_data = request.json
+
+    data = User_data(**request_data)
+
+    result = upsert("userdb.user_entry",request_data)
+
+    response_obj = {
+        "Message":f"Data has been updated {result}"
+    }
+    return Response(json.dumps(response_obj))
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port=8080)
