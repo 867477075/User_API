@@ -23,3 +23,7 @@
     Werkzeug==2.2.3
             '''
     - 
+### Day two
+    -Post method , DELETE method done.
+    -Exception-handling for both the methods done.
+    -
