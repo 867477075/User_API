@@ -51,17 +51,28 @@ def upsert(table_name,data):
         result = cursor.execute(Insert)
         conn.commit()
         cursor.close()
-        response_obj = {
-            "Massage": f"{result} New record Insert"
-        }
-        return Response(json.dumps(response_obj))
+
+        return result,status
     result = cursor.execute(Update)
     conn.commit()
     cursor.close()
 
-    response_obj = {
-        "Message":f" {result} Existing Record Updated"
+    return result,status
 
-    }
 
-    return Response(json.dumps(response_obj))
+def patch_record(table_name,data):
+
+    primary_value = data.get("id")
+    data = [f"{keys}='{values}'" for keys, values in data.items()]
+    data = ",".join(data)
+
+    update = f"""UPDATE {table_name} SET {data} WHERE id={primary_value}"""
+    cursor = conn.cursor()
+    result = cursor.execute(update)
+    conn.commit()
+    cursor.close()
+
+    return result
+
+
+
