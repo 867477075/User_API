@@ -73,13 +73,14 @@ def put_data():
     data = User_data(**request_data)
 
     result, status = upsert("userdb.user_entry",request_data)
+    breakpoint()
     if status == 0:
         response_obj = {
-            "Message":f"{result} New Record found and added successfully"
+            "Message":f"{result} New Record  added successfully"
         }
         return Response(json.dumps(response_obj))
     response_obj = {
-        "Message": f"{result} New Record found and added successfully"
+        "Message": f"{result} Existing record Updated"
     }
     return Response(json.dumps(response_obj))
 

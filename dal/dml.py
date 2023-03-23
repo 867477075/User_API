@@ -36,14 +36,15 @@ def upsert(table_name,data):
     all_column = ",".join(all_column)
     all_value = [y for y in data.values()]
     primary_value = all_value.pop(0)
-    all_value = "','".join(all_value)
+    all_value = "','".join(all_value) # 1 ',' 2 ',' 3 ','...n
 
-    key_value = [f"{keys}='{values}'" for keys,values in data.items()]
-    key_value = ",".join(key_value)
+    key_value = [f"{keys}='{values}'" for keys,values in data.items()] # [name='avc',city='pune'..]
+    key_value = ",".join(key_value) # "name = 'avc' ,city = 'pune',"
 
-    sql = f"""SELECT EXISTS(SELECT ID from {table_name} where {primary_key}={primary_value});"""
+    sql = f"""SELECT ID from {table_name} where {primary_key}={primary_value};"""
     Insert = f"""INSERT into {table_name}({primary_key},{all_column}) values({primary_value},'{all_value}');"""
     Update = f"""UPDATE {table_name} SET {key_value} where {primary_key}={primary_value};"""
+
     cursor = conn.cursor()
     status = cursor.execute(sql)
 
@@ -66,7 +67,8 @@ def patch_record(table_name,data):
     data = [f"{keys}='{values}'" for keys, values in data.items()]
     data = ",".join(data)
 
-    update = f"""UPDATE {table_name} SET {data} WHERE id={primary_value}"""
+    update = f"""UPDATE {table_name} SET {data} WHERE id={primary_value};"""
+    breakpoint()
     cursor = conn.cursor()
     result = cursor.execute(update)
     conn.commit()
